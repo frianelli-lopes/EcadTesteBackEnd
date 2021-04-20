@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using EcadTeste.Infra.Data.Context;
+using EcadTeste.Infra.Data.Seeds;
 
 namespace EcadTeste.Api
 {
@@ -45,6 +46,12 @@ namespace EcadTeste.Api
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<EcadTesteContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetService<EcadTesteContext>().Seed();
+            }
         }
     }
 }
