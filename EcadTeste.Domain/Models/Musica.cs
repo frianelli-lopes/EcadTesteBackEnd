@@ -11,6 +11,6 @@ namespace EcadTeste.Domain.Models
         public Guid IdGenero { get; set; }
 
         public Genero Genero { get; set; }
-        public virtual List<AutorMusica> Autores { get; set; }
+        public virtual List<AutorMusica> AutoresMusicas { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcadTeste.Infra.Data.Migrations
 {
     [DbContext(typeof(EcadTesteContext))]
-    [Migration("20210420202901_Banco inicial")]
-    partial class Bancoinicial
+    [Migration("20210421125636_Banco Inicial")]
+    partial class BancoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,6 @@ namespace EcadTeste.Infra.Data.Migrations
                         .HasColumnType("varchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<Guid>("IdCategoria")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("varchar(100)")
@@ -42,8 +39,6 @@ namespace EcadTeste.Infra.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_Autor");
-
-                    b.HasIndex("IdCategoria");
 
                     b.ToTable("Autor");
                 });
@@ -56,8 +51,13 @@ namespace EcadTeste.Infra.Data.Migrations
                     b.Property<Guid>("IdMusica")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("IdAutor", "IdMusica")
+                    b.Property<Guid>("IdCategoria")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("IdAutor", "IdMusica", "IdCategoria")
                         .HasName("PK_AutorMusica");
+
+                    b.HasIndex("IdCategoria");
 
                     b.HasIndex("IdMusica");
 
@@ -125,27 +125,24 @@ namespace EcadTeste.Infra.Data.Migrations
                     b.ToTable("Musica");
                 });
 
-            modelBuilder.Entity("EcadTeste.Domain.Models.Autor", b =>
-                {
-                    b.HasOne("EcadTeste.Domain.Models.Categoria", "Categoria")
-                        .WithMany("Autores")
-                        .HasForeignKey("IdCategoria")
-                        .HasConstraintName("FK_Autor_Categoria")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EcadTeste.Domain.Models.AutorMusica", b =>
                 {
                     b.HasOne("EcadTeste.Domain.Models.Autor", "Autor")
-                        .WithMany("Musicas")
+                        .WithMany("AutoresMusicas")
                         .HasForeignKey("IdAutor")
                         .HasConstraintName("FK_AutorMusica_Autor")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EcadTeste.Domain.Models.Categoria", "Categoria")
+                        .WithMany("AutoresMusicas")
+                        .HasForeignKey("IdCategoria")
+                        .HasConstraintName("FK_AutorMusica_Categoria")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EcadTeste.Domain.Models.Musica", "Musica")
-                        .WithMany("Autores")
+                        .WithMany("AutoresMusicas")
                         .HasForeignKey("IdMusica")
                         .HasConstraintName("FK_AutorMusica_Musica")
                         .OnDelete(DeleteBehavior.Cascade)

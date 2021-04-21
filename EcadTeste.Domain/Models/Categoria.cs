@@ -8,6 +8,6 @@ namespace EcadTeste.Domain.Models
         public Guid Id { get; set; }
         public string Nome { get; set; }
 
-        public List<Autor> Autores { get; set; }
+        public virtual List<AutorMusica> AutoresMusicas { get; set; }
     }
 }

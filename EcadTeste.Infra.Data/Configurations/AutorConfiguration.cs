@@ -19,13 +19,6 @@ namespace EcadTeste.Infra.Data.Configurations
 
             //Chaves
             builder.HasKey(p => p.Id).HasName("PK_Autor");
-
-            //Chaves estrangeiras
-            builder.HasOne(a => a.Categoria)
-                .WithMany(c => c.Autores)
-                .HasConstraintName("FK_Autor_Categoria")
-                .HasForeignKey(p => p.IdCategoria)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

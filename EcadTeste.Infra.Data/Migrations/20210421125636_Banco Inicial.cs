@@ -3,10 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EcadTeste.Infra.Data.Migrations
 {
-    public partial class Bancoinicial : Migration
+    public partial class BancoInicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Autor",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Codigo = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
+                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Autor", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Categoria",
                 columns: table => new
@@ -29,26 +42,6 @@ namespace EcadTeste.Infra.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Genero", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Autor",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Codigo = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
-                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    IdCategoria = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Autor", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Autor_Categoria",
-                        column: x => x.IdCategoria,
-                        principalTable: "Categoria",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,15 +69,22 @@ namespace EcadTeste.Infra.Data.Migrations
                 columns: table => new
                 {
                     IdAutor = table.Column<Guid>(nullable: false),
-                    IdMusica = table.Column<Guid>(nullable: false)
+                    IdMusica = table.Column<Guid>(nullable: false),
+                    IdCategoria = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AutorMusica", x => new { x.IdAutor, x.IdMusica });
+                    table.PrimaryKey("PK_AutorMusica", x => new { x.IdAutor, x.IdMusica, x.IdCategoria });
                     table.ForeignKey(
                         name: "FK_AutorMusica_Autor",
                         column: x => x.IdAutor,
                         principalTable: "Autor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AutorMusica_Categoria",
+                        column: x => x.IdCategoria,
+                        principalTable: "Categoria",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -96,8 +96,8 @@ namespace EcadTeste.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Autor_IdCategoria",
-                table: "Autor",
+                name: "IX_AutorMusica_IdCategoria",
+                table: "AutorMusica",
                 column: "IdCategoria");
 
             migrationBuilder.CreateIndex(
@@ -120,10 +120,10 @@ namespace EcadTeste.Infra.Data.Migrations
                 name: "Autor");
 
             migrationBuilder.DropTable(
-                name: "Musica");
+                name: "Categoria");
 
             migrationBuilder.DropTable(
-                name: "Categoria");
+                name: "Musica");
 
             migrationBuilder.DropTable(
                 name: "Genero");
