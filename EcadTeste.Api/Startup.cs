@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using EcadTeste.Infra.Data.Context;
 using EcadTeste.Infra.Data.Seeds;
+using EcadTeste.Infra.IoC;
 
 namespace EcadTeste.Api
 {
@@ -25,7 +26,19 @@ namespace EcadTeste.Api
 
             services.AddDbContext<EcadTesteContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EcadTesteContext")));
-            
+
+            DIContainer.RegisterDependencies(services);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DefaultPolicy", builder =>
+                {
+                    builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +54,8 @@ namespace EcadTeste.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("DefaultPolicy");
 
             app.UseEndpoints(endpoints =>
             {

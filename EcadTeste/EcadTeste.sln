@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcadTeste.Api", "..\EcadTeste.Api\EcadTeste.Api.csproj", "{E77C74CA-B727-4DD7-888D-25B934274DE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Api", "..\EcadTeste.Api\EcadTeste.Api.csproj", "{E77C74CA-B727-4DD7-888D-25B934274DE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcadTeste.Domain", "..\EcadTeste.Domain\EcadTeste.Domain.csproj", "{AB542E39-39E5-4AB7-8C29-A7D161345192}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Domain", "..\EcadTeste.Domain\EcadTeste.Domain.csproj", "{AB542E39-39E5-4AB7-8C29-A7D161345192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcadTeste.Infra.Data", "..\EcadTeste.Infra.Data\EcadTeste.Infra.Data.csproj", "{0148A543-0829-4B58-BD69-8898C01C160A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Infra.Data", "..\EcadTeste.Infra.Data\EcadTeste.Infra.Data.csproj", "{0148A543-0829-4B58-BD69-8898C01C160A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcadTeste.Service", "..\EcadTeste.Service\EcadTeste.Service.csproj", "{E128B917-452F-401C-8114-B58EF473E03A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Service", "..\EcadTeste.Service\EcadTeste.Service.csproj", "{E128B917-452F-401C-8114-B58EF473E03A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcadTeste.Infra.IoC", "..\EcadTeste.Infra.IoC\EcadTeste.Infra.IoC.csproj", "{D6F7574D-9CD6-4C6C-970F-070FF7845231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Infra.IoC", "..\EcadTeste.Infra.IoC\EcadTeste.Infra.IoC.csproj", "{D6F7574D-9CD6-4C6C-970F-070FF7845231}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{75530006-A7B9-4D24-ABA8-FC1A42E6B66D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

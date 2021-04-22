@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EcadTeste.Infra.Data\EcadTeste.Infra.Data.csproj" />
+    <ProjectReference Include="..\EcadTeste.Infra.IoC\EcadTeste.Infra.IoC.csproj" />
   </ItemGroup>
 
 
