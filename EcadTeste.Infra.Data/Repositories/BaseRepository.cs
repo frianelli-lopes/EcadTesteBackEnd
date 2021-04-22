@@ -1,6 +1,7 @@
 ﻿using EcadTeste.Domain.Interfaces.Repositories;
 using EcadTeste.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace EcadTeste.Infra.Data.Repositories
             db.SaveChanges();
         }
 
-        public void Excluir(int id)
+        public void Excluir(Guid id)
         {
             var entity = RecuperarPorId(id);
             db.Set<T>().Remove(entity);
@@ -39,7 +40,7 @@ namespace EcadTeste.Infra.Data.Repositories
             return db.Set<T>().ToList();
         }
 
-        public T RecuperarPorId(int id)
+        public T RecuperarPorId(Guid id)
         {
             return db.Set<T>().Find(id);
         }

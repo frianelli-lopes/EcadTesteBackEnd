@@ -1,12 +1,11 @@
-﻿using System;
+﻿using EcadTeste.Domain.Interfaces.Services;
+using EcadTeste.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EcadTeste.Domain.Models;
-using EcadTeste.Infra.Data.Context;
 
 namespace EcadTeste.Api.Controllers
 {
@@ -14,25 +13,25 @@ namespace EcadTeste.Api.Controllers
     [ApiController]
     public class GeneroController : ControllerBase
     {
-        private readonly EcadTesteContext _context;
+        private readonly IGeneroService _generoService;
 
-        public GeneroController(EcadTesteContext context)
+        public GeneroController(IGeneroService generoService)
         {
-            _context = context;
+            _generoService = generoService;
         }
 
         // GET: api/Genero
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Genero>>> GetGenero()
+        public ActionResult<IEnumerable<Genero>> GetGenero()
         {
-            return await _context.Genero.ToListAsync();
+            return _generoService.Listar();
         }
 
         // GET: api/Genero/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Genero>> GetGenero(Guid id)
+        public ActionResult<Genero> GetGenero(Guid id)
         {
-            var genero = await _context.Genero.FindAsync(id);
+            var genero = _generoService.RecuperarPorId(id);
 
             if (genero == null)
             {
@@ -46,29 +45,20 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGenero(Guid id, Genero genero)
+        public IActionResult PutGenero(Guid id, Genero genero)
         {
             if (id != genero.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(genero).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _generoService.Alterar(genero);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GeneroExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
@@ -78,33 +68,26 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Genero>> PostGenero(Genero genero)
+        public ActionResult<Genero> PostGenero(Genero genero)
         {
-            _context.Genero.Add(genero);
-            await _context.SaveChangesAsync();
+            _generoService.Incluir(genero);
 
             return CreatedAtAction("GetGenero", new { id = genero.Id }, genero);
         }
 
         // DELETE: api/Genero/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Genero>> DeleteGenero(Guid id)
+        public ActionResult DeleteGenero(Guid id)
         {
-            var genero = await _context.Genero.FindAsync(id);
+            var genero = _generoService.RecuperarPorId(id);
             if (genero == null)
             {
                 return NotFound();
             }
 
-            _context.Genero.Remove(genero);
-            await _context.SaveChangesAsync();
+            _generoService.Excluir(id);
 
-            return genero;
-        }
-
-        private bool GeneroExists(Guid id)
-        {
-            return _context.Genero.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

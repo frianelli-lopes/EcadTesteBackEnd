@@ -6,7 +6,7 @@ namespace EcadTeste.Service
 {
     public class AutorMusicaService : BaseService<AutorMusica>, IAutorMusicaService
     {
-        public AutorMusicaService(IBaseRepository<AutorMusica> repository) : base(repository)
+        public AutorMusicaService(IAutorMusicaRepository repository) : base(repository)
         {
         }
     }

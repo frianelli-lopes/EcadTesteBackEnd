@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using EcadTeste.Domain.Interfaces.Services;
+using EcadTeste.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EcadTeste.Domain.Models;
-using EcadTeste.Infra.Data.Context;
+using System;
+using System.Collections.Generic;
 
 namespace EcadTeste.Api.Controllers
 {
@@ -14,25 +11,25 @@ namespace EcadTeste.Api.Controllers
     [ApiController]
     public class MusicaController : ControllerBase
     {
-        private readonly EcadTesteContext _context;
+        private readonly IMusicaService _musicaService;
 
-        public MusicaController(EcadTesteContext context)
+        public MusicaController(IMusicaService musicaService)
         {
-            _context = context;
+            _musicaService = musicaService;
         }
 
         // GET: api/Musica
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Musica>>> GetMusica()
+        public ActionResult<IEnumerable<Musica>> GetMusica()
         {
-            return await _context.Musica.ToListAsync();
+            return _musicaService.Listar();
         }
 
         // GET: api/Musica/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Musica>> GetMusica(Guid id)
+        public ActionResult<Musica> GetMusica(Guid id)
         {
-            var musica = await _context.Musica.FindAsync(id);
+            var musica = _musicaService.RecuperarPorId(id);
 
             if (musica == null)
             {
@@ -46,29 +43,20 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMusica(Guid id, Musica musica)
+        public IActionResult PutMusica(Guid id, Musica musica)
         {
             if (id != musica.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(musica).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _musicaService.Alterar(musica);
             }
             catch (DbUpdateConcurrencyException)
-            {
-                if (!MusicaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+            {                
+                throw;
             }
 
             return NoContent();
@@ -78,33 +66,26 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Musica>> PostMusica(Musica musica)
+        public ActionResult<Musica> PostMusica(Musica musica)
         {
-            _context.Musica.Add(musica);
-            await _context.SaveChangesAsync();
+            _musicaService.Incluir(musica);
 
             return CreatedAtAction("GetMusica", new { id = musica.Id }, musica);
         }
 
         // DELETE: api/Musica/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Musica>> DeleteMusica(Guid id)
+        public ActionResult DeleteMusica(Guid id)
         {
-            var musica = await _context.Musica.FindAsync(id);
+            var musica = _musicaService.RecuperarPorId(id);
             if (musica == null)
             {
                 return NotFound();
             }
 
-            _context.Musica.Remove(musica);
-            await _context.SaveChangesAsync();
+            _musicaService.Excluir(id);
 
-            return musica;
-        }
-
-        private bool MusicaExists(Guid id)
-        {
-            return _context.Musica.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

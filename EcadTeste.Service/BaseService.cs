@@ -1,5 +1,6 @@
 ﻿using EcadTeste.Domain.Interfaces.Repositories;
 using EcadTeste.Domain.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 
 namespace EcadTeste.Service
@@ -18,7 +19,7 @@ namespace EcadTeste.Service
             _repository.Alterar(obj);
         }
 
-        public void Excluir(int id)
+        public void Excluir(Guid id)
         {
             _repository.Excluir(id);
         }
@@ -33,7 +34,7 @@ namespace EcadTeste.Service
             return _repository.Listar();
         }
 
-        public T RecuperarPorId(int id)
+        public T RecuperarPorId(Guid id)
         {
             return _repository.RecuperarPorId(id);
         }

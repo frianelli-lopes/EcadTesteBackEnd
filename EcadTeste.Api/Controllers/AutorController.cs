@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using EcadTeste.Domain.Interfaces.Services;
+using EcadTeste.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EcadTeste.Domain.Models;
-using EcadTeste.Infra.Data.Context;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EcadTeste.Api.Controllers
 {
@@ -14,25 +12,25 @@ namespace EcadTeste.Api.Controllers
     [ApiController]
     public class AutorController : ControllerBase
     {
-        private readonly EcadTesteContext _context;
+        private readonly IAutorService _autorService;
 
-        public AutorController(EcadTesteContext context)
+        public AutorController(IAutorService autorService)
         {
-            _context = context;
+            _autorService = autorService;
         }
 
         // GET: api/Autor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Autor>>> GetAutor()
+        public ActionResult<IEnumerable<Autor>> GetAutor()
         {
-            return await _context.Autor.ToListAsync();
+            return _autorService.Listar();
         }
 
         // GET: api/Autor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Autor>> GetAutor(Guid id)
+        public ActionResult<Autor> GetAutor(Guid id)
         {
-            var autor = await _context.Autor.FindAsync(id);
+            var autor = _autorService.RecuperarPorId(id);
 
             if (autor == null)
             {
@@ -46,29 +44,20 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAutor(Guid id, Autor autor)
+        public IActionResult PutAutor(Guid id, Autor autor)
         {
             if (id != autor.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(autor).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _autorService.Alterar(autor);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AutorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
@@ -78,33 +67,26 @@ namespace EcadTeste.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Autor>> PostAutor(Autor autor)
+        public ActionResult<Autor> PostAutor(Autor autor)
         {
-            _context.Autor.Add(autor);
-            await _context.SaveChangesAsync();
+            _autorService.Incluir(autor);
 
             return CreatedAtAction("GetAutor", new { id = autor.Id }, autor);
         }
 
         // DELETE: api/Autor/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Autor>> DeleteAutor(Guid id)
+        public ActionResult DeleteAutor(Guid id)
         {
-            var autor = await _context.Autor.FindAsync(id);
+            var autor = _autorService.RecuperarPorId(id);
             if (autor == null)
             {
                 return NotFound();
             }
 
-            _context.Autor.Remove(autor);
-            await _context.SaveChangesAsync();
+            _autorService.Excluir(id);
 
-            return autor;
-        }
-
-        private bool AutorExists(Guid id)
-        {
-            return _context.Autor.Any(e => e.Id == id);
+            return NoContent();
         }
     }
 }

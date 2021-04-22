@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EcadTeste.Domain.Interfaces.Services
 {
     public interface IBaseService<T> where T : class
     {
         List<T> Listar();
-        T RecuperarPorId(int id);
+        T RecuperarPorId(Guid id);
         void Incluir(T obj);
         void Alterar(T obj);
-        void Excluir(int id);
+        void Excluir(Guid id);
     }
 }

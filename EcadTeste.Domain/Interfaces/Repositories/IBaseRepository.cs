@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EcadTeste.Domain.Interfaces.Repositories
 {
     public interface IBaseRepository<T> where T : class
     {
         List<T> Listar();
-        T RecuperarPorId(int id);
+        T RecuperarPorId(Guid id);
         void Incluir(T obj);
         void Alterar(T obj);
-        void Excluir(int id);
+        void Excluir(Guid id);
     }
 }

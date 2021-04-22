@@ -13,7 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Service", "..\Eca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcadTeste.Infra.IoC", "..\EcadTeste.Infra.IoC\EcadTeste.Infra.IoC.csproj", "{D6F7574D-9CD6-4C6C-970F-070FF7845231}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{75530006-A7B9-4D24-ABA8-FC1A42E6B66D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{75530006-A7B9-4D24-ABA8-FC1A42E6B66D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Presentation", "0 - Presentation", "{9775A34B-603F-431B-9FF7-0D0F8A846DEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{7818A15B-6E21-440F-82B7-D94699C742D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Service", "3 - Service", "{066687CF-B90C-4B44-BA74-23D957AC03FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infra", "4 - Infra", "{ED17FBA9-50D1-4A04-B199-592195BE84E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +52,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E77C74CA-B727-4DD7-888D-25B934274DE9} = {9775A34B-603F-431B-9FF7-0D0F8A846DEB}
+		{AB542E39-39E5-4AB7-8C29-A7D161345192} = {7818A15B-6E21-440F-82B7-D94699C742D0}
+		{0148A543-0829-4B58-BD69-8898C01C160A} = {ED17FBA9-50D1-4A04-B199-592195BE84E5}
+		{E128B917-452F-401C-8114-B58EF473E03A} = {066687CF-B90C-4B44-BA74-23D957AC03FB}
+		{D6F7574D-9CD6-4C6C-970F-070FF7845231} = {ED17FBA9-50D1-4A04-B199-592195BE84E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0C3C9CF0-C95B-4C42-BB5B-B0893D9DBEE4}

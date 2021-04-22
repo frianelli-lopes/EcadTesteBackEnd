@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using EcadTeste.Infra.Data.Context;
 using EcadTeste.Infra.Data.Seeds;
 using EcadTeste.Infra.IoC;
+using Microsoft.OpenApi.Models;
 
 namespace EcadTeste.Api
 {
@@ -39,11 +40,34 @@ namespace EcadTeste.Api
                     .AllowAnyHeader();
                 });
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API - Processo Seletivo Ecad",
+                    Description = "API referente ao processo seletivo do Ecad",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Flavio Rianelli",
+                        Email = "frianelli.lopes@gmail.com"
+                    },
+                });
+            });
+            //services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API - Processo Seletivo Ecad");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
