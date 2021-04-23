@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace EcadTeste.Domain.Models
 {
-    public class Musica
+    public class Musica : EntityBase
     {
-        public Guid Id { get; set; }
         public string Codigo { get; set; }
         public string Nome { get; set; }
         public Guid IdGenero { get; set; }

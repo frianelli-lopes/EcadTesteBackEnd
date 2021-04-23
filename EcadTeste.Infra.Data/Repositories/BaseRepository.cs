@@ -16,31 +16,31 @@ namespace EcadTeste.Infra.Data.Repositories
             db = context;
         }
 
-        public void Alterar(T obj)
+        public virtual void Alterar(T obj)
         {
             db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        public void Excluir(Guid id)
+        public virtual void Excluir(Guid id)
         {
             var entity = RecuperarPorId(id);
             db.Set<T>().Remove(entity);
             db.SaveChanges();
         }
 
-        public void Incluir(T obj)
+        public virtual void Incluir(T obj)
         {
             db.Set<T>().Add(obj);
             db.SaveChanges();
         }
 
-        public List<T> Listar()
+        public virtual List<T> Listar()
         {
             return db.Set<T>().ToList();
         }
 
-        public T RecuperarPorId(Guid id)
+        public virtual T RecuperarPorId(Guid id)
         {
             return db.Set<T>().Find(id);
         }

@@ -28,6 +28,8 @@ namespace EcadTeste.Api
             services.AddDbContext<EcadTesteContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EcadTesteContext")));
 
+            services.AddAutoMapper(typeof(Startup));
+
             DIContainer.RegisterDependencies(services);
 
             services.AddCors(options =>

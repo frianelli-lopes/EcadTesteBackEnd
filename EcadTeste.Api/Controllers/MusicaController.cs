@@ -54,7 +54,7 @@ namespace EcadTeste.Api.Controllers
             {
                 _musicaService.Alterar(musica);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {                
                 throw;
             }

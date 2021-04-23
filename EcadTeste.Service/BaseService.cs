@@ -7,14 +7,14 @@ namespace EcadTeste.Service
 {
     public abstract class BaseService<T> : IBaseService<T> where T : class
     {
-        private readonly IBaseRepository<T> _repository;
+        protected readonly IBaseRepository<T> _repository;
 
         public BaseService(IBaseRepository<T> repository)
         {
             _repository = repository;
         }
         
-        public void Alterar(T obj)
+        public virtual void Alterar(T obj)
         {
             _repository.Alterar(obj);
         }
@@ -24,7 +24,7 @@ namespace EcadTeste.Service
             _repository.Excluir(id);
         }
 
-        public void Incluir(T obj)
+        public virtual void Incluir(T obj)
         {
             _repository.Incluir(obj);
         }

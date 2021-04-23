@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace EcadTeste.Domain.Models
 {
-    public class Autor
+    public class Autor : EntityBase
     {
-        public Guid Id { get; set; }
         public string Codigo { get; set; }
         public string Nome { get; set; }
 
