@@ -10,12 +10,15 @@ namespace EcadTeste.Service
     {
         private readonly IMusicaRepository _musicaRepository;
         private readonly IAutorMusicaRepository _autorMusicaRepository;
+        private readonly IGeneroRepository _generoRepository;
 
         public MusicaService(IMusicaRepository repository, 
-                             IAutorMusicaRepository autorMusicaRepository) : base(repository)
+                             IAutorMusicaRepository autorMusicaRepository,
+                             IGeneroRepository generoRepository) : base(repository)
         {
             _musicaRepository = repository;
             _autorMusicaRepository = autorMusicaRepository;
+            _generoRepository = generoRepository;
         }
 
         public override void Alterar(Musica obj)
@@ -28,6 +31,8 @@ namespace EcadTeste.Service
             Musica musica = _musicaRepository.RecuperarMusicaGeneroAutores(obj.Id);
             musica.Codigo = obj.Codigo;
             musica.Nome = obj.Nome;
+            musica.IdGenero = obj.IdGenero;
+            musica.Genero = _generoRepository.RecuperarPorId(obj.IdGenero);
 
             if (obj.AutoresMusicas != null)
             {
