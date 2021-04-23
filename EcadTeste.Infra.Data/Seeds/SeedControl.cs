@@ -64,18 +64,8 @@ namespace EcadTeste.Infra.Data.Seeds
                         {
                             new AutorMusica()
                             {
-                                Autor = context.Autor.Where(a => a.Nome == "Roberto Carlos").FirstOrDefault(),
-                                Categoria = context.Categoria.Where(c => c.Nome == "Compositor").FirstOrDefault()
-                            },
-                            new AutorMusica()
-                            {
-                                Autor = context.Autor.Where(a => a.Nome == "Erasmo Carlos").FirstOrDefault(),
-                                Categoria = context.Categoria.Where(c => c.Nome == "Compositor").FirstOrDefault()
-                            },
-                            new AutorMusica()
-                            {
-                                Autor = context.Autor.Where(a => a.Nome == "Roberto Carlos").FirstOrDefault(),
-                                Categoria = context.Categoria.Where(c => c.Nome == "Intérprete").FirstOrDefault()
+                                Autor = context.Autor.FirstOrDefault(),
+                                Categoria = context.Categoria.FirstOrDefault()
                             }
                         }
                     }

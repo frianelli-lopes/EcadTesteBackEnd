@@ -2,32 +2,32 @@
 using EcadTeste.Domain.Interfaces.Services;
 using EcadTeste.Domain.Models;
 using System;
+using System.Collections.Generic;
 
 namespace EcadTeste.Service
 {
     public class MusicaService : BaseService<Musica>, IMusicaService
     {
-        private readonly IAutorService _autorService;
-        private readonly ICategoriaService _categoriaService;
+        private readonly IMusicaRepository _musicaRepository;
+        private readonly IAutorMusicaRepository _autorMusicaRepository;
 
-        public MusicaService(
-            IMusicaRepository repository, 
-            IAutorService autorService,
-            ICategoriaService categoriaService
-            ) : base(repository)
+        public MusicaService(IMusicaRepository repository, 
+                             IAutorMusicaRepository autorMusicaRepository) : base(repository)
         {
-            _autorService = autorService;
-            _categoriaService = categoriaService;
+            _musicaRepository = repository;
+            _autorMusicaRepository = autorMusicaRepository;
         }
 
         public override void Alterar(Musica obj)
         {
             AutorMusica autorMusica = null;
 
-            Musica musica = _repository.RecuperarPorId(obj.Id);
+            //Exclui os autores associados a música
+            _autorMusicaRepository.ExcluirPorMusica(obj.Id);
+
+            Musica musica = _musicaRepository.RecuperarMusicaGeneroAutores(obj.Id);
             musica.Codigo = obj.Codigo;
             musica.Nome = obj.Nome;
-            musica.AutoresMusicas.Clear();
 
             if (obj.AutoresMusicas != null)
             {
@@ -42,6 +42,26 @@ namespace EcadTeste.Service
             }
 
             base.Alterar(musica);
+        }
+
+        public List<Musica> ListarMusicaGenero()
+        {
+            return _musicaRepository.ListarMusicaGenero();
+        }
+
+        public List<Musica> ListarMusicaGeneroAutores()
+        {
+            return _musicaRepository.ListarMusicaGeneroAutores();
+        }
+
+        public Musica RecuperarMusicaGenero(Guid id)
+        {
+            return _musicaRepository.RecuperarMusicaGenero(id);
+        }
+
+        public Musica RecuperarMusicaGeneroAutores(Guid id)
+        {
+            return _musicaRepository.RecuperarMusicaGeneroAutores(id);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EcadTeste.Domain.Interfaces.Repositories;
 using EcadTeste.Domain.Interfaces.Services;
 using EcadTeste.Domain.Models;
+using System;
 
 namespace EcadTeste.Service
 {

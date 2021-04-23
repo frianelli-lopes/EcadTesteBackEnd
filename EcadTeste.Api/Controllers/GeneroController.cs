@@ -1,7 +1,8 @@
-﻿using EcadTeste.Domain.Interfaces.Services;
+﻿using AutoMapper;
+using EcadTeste.Api.DTOs;
+using EcadTeste.Domain.Interfaces.Services;
 using EcadTeste.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -12,80 +13,63 @@ namespace EcadTeste.Api.Controllers
     public class GeneroController : ControllerBase
     {
         private readonly IGeneroService _generoService;
+        private readonly IMapper _mapper;
 
-        public GeneroController(IGeneroService generoService)
+        public GeneroController(IGeneroService generoService,
+                                IMapper mapper)
         {
             _generoService = generoService;
+            _mapper = mapper;
         }
 
-        // GET: api/Genero
         [HttpGet]
-        public ActionResult<IEnumerable<Genero>> GetGenero()
+        public IEnumerable<GeneroDTO> Listar()
         {
-            return _generoService.Listar();
+            return _mapper.Map<IEnumerable<GeneroDTO>>(_generoService.Listar());
         }
 
-        // GET: api/Genero/5
         [HttpGet("{id}")]
-        public ActionResult<Genero> GetGenero(Guid id)
+        public ActionResult<GeneroDTO> Recuperar(Guid id)
         {
-            var genero = _generoService.RecuperarPorId(id);
+            var genero = _mapper.Map<GeneroDTO>(_generoService.RecuperarPorId(id));
 
-            if (genero == null)
-            {
-                return NotFound();
-            }
-
+            if (genero == null) return NotFound();
+            
             return genero;
         }
 
-        // PUT: api/Genero/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public IActionResult PutGenero(Guid id, Genero genero)
-        {
-            if (id != genero.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                _generoService.Alterar(genero);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Genero
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<Genero> PostGenero(Genero genero)
+        public ActionResult<GeneroDTO> Incluir(GeneroDTO genero)
         {
-            _generoService.Incluir(genero);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return CreatedAtAction("GetGenero", new { id = genero.Id }, genero);
+            _generoService.Incluir(_mapper.Map<Genero>(genero));
+
+            return Ok();
         }
 
-        // DELETE: api/Genero/5
-        [HttpDelete("{id}")]
-        public ActionResult DeleteGenero(Guid id)
+        [HttpPut("{id}")]
+        public ActionResult<GeneroDTO> Alterar(Guid id, GeneroDTO genero)
         {
-            var genero = _generoService.RecuperarPorId(id);
-            if (genero == null)
-            {
-                return NotFound();
-            }
+            if (id != genero.Id) return BadRequest();
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            _generoService.Alterar(_mapper.Map<Genero>(genero));
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<GeneroDTO> Excluir(Guid id)
+        {
+            //Verifica se o registro que será excluído existe
+            var genero = _mapper.Map<GeneroDTO>(_generoService.RecuperarPorId(id));
+            if (genero == null) return NotFound();
 
             _generoService.Excluir(id);
 
-            return NoContent();
+            return Ok();
         }
     }
 }

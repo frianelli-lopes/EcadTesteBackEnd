@@ -13,17 +13,17 @@ namespace EcadTeste.Infra.IoC
         {
             services.AddScoped<EcadTesteContext>();
 
-            services.AddTransient<IAutorService, AutorService>();
-            services.AddTransient<IMusicaService, MusicaService>();
-            services.AddTransient<IGeneroService, GeneroService>();
-            services.AddTransient<ICategoriaService, CategoriaService>();
-            services.AddTransient<IAutorMusicaService, AutorMusicaService>();
-
-            services.AddTransient<IAutorRepository, AutorRepository>();
-            services.AddTransient<IMusicaRepository, MusicaRepository>();
-            services.AddTransient<IGeneroRepository, GeneroRepository>();
-            services.AddTransient<ICategoriaRepository, CategoriaRepository>();
-            services.AddTransient<IAutorMusicaRepository, AutorMusicaRepository>();
+            services.AddScoped<IAutorService, AutorService>();
+            services.AddScoped<IMusicaService, MusicaService>();
+            services.AddScoped<IGeneroService, GeneroService>();
+            services.AddScoped<ICategoriaService, CategoriaService>();
+            services.AddScoped<IAutorMusicaService, AutorMusicaService>();
+                     
+            services.AddScoped<IAutorRepository, AutorRepository>();
+            services.AddScoped<IMusicaRepository, MusicaRepository>();
+            services.AddScoped<IGeneroRepository, GeneroRepository>();
+            services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            services.AddScoped<IAutorMusicaRepository, AutorMusicaRepository>();
         }
     }
 }

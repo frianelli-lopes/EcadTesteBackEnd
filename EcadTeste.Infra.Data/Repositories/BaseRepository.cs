@@ -1,4 +1,5 @@
 ﻿using EcadTeste.Domain.Interfaces.Repositories;
+using EcadTeste.Domain.Models;
 using EcadTeste.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,40 +10,52 @@ namespace EcadTeste.Infra.Data.Repositories
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        protected EcadTesteContext db;
+        protected readonly EcadTesteContext Db;
+        protected readonly DbSet<T> DbSet;
 
-        public BaseRepository(EcadTesteContext context)
+        protected BaseRepository(EcadTesteContext db)
         {
-            db = context;
+            Db = db;
+            DbSet = db.Set<T>();
         }
 
-        public virtual void Alterar(T obj)
+        public virtual T RecuperarPorId(Guid id)
         {
-            db.Entry(obj).State = EntityState.Modified;
-            db.SaveChanges();
+            return DbSet.Find(id);
+        }
+
+        public virtual List<T> Listar()
+        {
+            return DbSet.ToList();
+        }
+
+        public virtual void Incluir(T entity)
+        {
+            DbSet.Add(entity);
+            SaveChanges();
+        }
+
+        public virtual void Alterar(T entity)
+        {
+            DbSet.Update(entity);
+            SaveChanges();
         }
 
         public virtual void Excluir(Guid id)
         {
             var entity = RecuperarPorId(id);
-            db.Set<T>().Remove(entity);
-            db.SaveChanges();
+            DbSet.Remove(entity);
+            SaveChanges();
         }
 
-        public virtual void Incluir(T obj)
+        public int SaveChanges()
         {
-            db.Set<T>().Add(obj);
-            db.SaveChanges();
+            return Db.SaveChanges();
         }
 
-        public virtual List<T> Listar()
+        public void Dispose()
         {
-            return db.Set<T>().ToList();
-        }
-
-        public virtual T RecuperarPorId(Guid id)
-        {
-            return db.Set<T>().Find(id);
+            Db?.Dispose();
         }
     }
 }

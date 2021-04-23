@@ -1,7 +1,8 @@
-﻿using EcadTeste.Domain.Interfaces.Services;
+﻿using AutoMapper;
+using EcadTeste.Api.DTOs;
+using EcadTeste.Domain.Interfaces.Services;
 using EcadTeste.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -12,80 +13,63 @@ namespace EcadTeste.Api.Controllers
     public class MusicaController : ControllerBase
     {
         private readonly IMusicaService _musicaService;
+        private readonly IMapper _mapper;
 
-        public MusicaController(IMusicaService musicaService)
+        public MusicaController(IMusicaService musicaService,
+                               IMapper mapper)
         {
             _musicaService = musicaService;
+            _mapper = mapper;
         }
 
-        // GET: api/Musica
         [HttpGet]
-        public ActionResult<IEnumerable<Musica>> GetMusica()
+        public IEnumerable<MusicaResponseDTO> Listar()
         {
-            return _musicaService.Listar();
+            return _mapper.Map<IEnumerable<MusicaResponseDTO>>(_musicaService.ListarMusicaGenero());
         }
 
-        // GET: api/Musica/5
         [HttpGet("{id}")]
-        public ActionResult<Musica> GetMusica(Guid id)
+        public ActionResult<MusicaResponseDTO> Recuperar(Guid id)
         {
-            var musica = _musicaService.RecuperarPorId(id);
+            var autor = _mapper.Map<MusicaResponseDTO>(_musicaService.RecuperarMusicaGenero(id));
 
-            if (musica == null)
-            {
-                return NotFound();
-            }
+            if (autor == null) return NotFound();
 
-            return musica;
+            return autor;
         }
 
-        // PUT: api/Musica/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public IActionResult PutMusica(Guid id, Musica musica)
-        {
-            if (id != musica.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                _musicaService.Alterar(musica);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {                
-                throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Musica
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<Musica> PostMusica(Musica musica)
+        public ActionResult<MusicaRequestDTO> Incluir(MusicaRequestDTO musica)
         {
-            _musicaService.Incluir(musica);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return CreatedAtAction("GetMusica", new { id = musica.Id }, musica);
+            _musicaService.Incluir(_mapper.Map<Musica>(musica));
+
+            return Ok();
         }
 
-        // DELETE: api/Musica/5
-        [HttpDelete("{id}")]
-        public ActionResult DeleteMusica(Guid id)
+        [HttpPut("{id}")]
+        public ActionResult<MusicaRequestDTO> Alterar(Guid id, MusicaRequestDTO musica)
         {
-            var musica = _musicaService.RecuperarPorId(id);
-            if (musica == null)
-            {
-                return NotFound();
-            }
+            if (id != musica.Id) return BadRequest();
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            _musicaService.Alterar(_mapper.Map<Musica>(musica));
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Excluir(Guid id)
+        {
+            //Verifica se o registro que será excluído existe
+            var autor = _mapper.Map<MusicaResponseDTO>(_musicaService.RecuperarPorId(id));
+            if (autor == null) return NotFound();
 
             _musicaService.Excluir(id);
 
-            return NoContent();
+            return Ok();
         }
     }
 }

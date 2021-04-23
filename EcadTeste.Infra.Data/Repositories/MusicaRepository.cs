@@ -1,7 +1,10 @@
 ﻿using EcadTeste.Domain.Interfaces.Repositories;
 using EcadTeste.Domain.Models;
 using EcadTeste.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EcadTeste.Infra.Data.Repositories
 {
@@ -11,13 +14,34 @@ namespace EcadTeste.Infra.Data.Repositories
         {
         }
 
-        public override Musica RecuperarPorId(Guid id)
+        public List<Musica> ListarMusicaGenero()
         {
-            Musica musica = base.RecuperarPorId(id);
+            return Db.Musica.AsNoTracking()
+                .Include(m => m.Genero)
+                .ToList();
+        }
 
-            db.Entry<Musica>(musica).Collection("AutoresMusicas").Load();
+        public List<Musica> ListarMusicaGeneroAutores()
+        {
+            return Db.Musica.AsNoTracking()
+                .Include(m => m.Genero)
+                .Include(m => m.AutoresMusicas)
+                .ToList();
+        }
 
-            return musica;
+        public Musica RecuperarMusicaGenero(Guid id)
+        {
+            return Db.Musica.AsNoTracking()
+                .Include(m => m.Genero)
+                .FirstOrDefault(m => m.Id == id);
+        }
+
+        public Musica RecuperarMusicaGeneroAutores(Guid id)
+        {
+            return Db.Musica.AsNoTracking()
+                .Include(m => m.Genero)
+                .Include(m => m.AutoresMusicas)
+                .FirstOrDefault(m => m.Id == id);
         }
     }
 }

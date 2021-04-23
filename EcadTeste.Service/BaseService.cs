@@ -29,12 +29,12 @@ namespace EcadTeste.Service
             _repository.Incluir(obj);
         }
 
-        public List<T> Listar()
+        public virtual List<T> Listar()
         {
             return _repository.Listar();
         }
 
-        public T RecuperarPorId(Guid id)
+        public virtual T RecuperarPorId(Guid id)
         {
             return _repository.RecuperarPorId(id);
         }

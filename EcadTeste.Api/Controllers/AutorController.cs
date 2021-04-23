@@ -1,7 +1,8 @@
-﻿using EcadTeste.Domain.Interfaces.Services;
+﻿using AutoMapper;
+using EcadTeste.Api.DTOs;
+using EcadTeste.Domain.Interfaces.Services;
 using EcadTeste.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -12,80 +13,63 @@ namespace EcadTeste.Api.Controllers
     public class AutorController : ControllerBase
     {
         private readonly IAutorService _autorService;
+        private readonly IMapper _mapper;
 
-        public AutorController(IAutorService autorService)
+        public AutorController(IAutorService autorService,
+                               IMapper mapper)
         {
             _autorService = autorService;
+            _mapper = mapper;
         }
 
-        // GET: api/Autor
         [HttpGet]
-        public ActionResult<IEnumerable<Autor>> GetAutor()
+        public IEnumerable<AutorDTO> Listar()
         {
-            return _autorService.Listar();
+            return _mapper.Map<IEnumerable<AutorDTO>>(_autorService.Listar());
         }
 
-        // GET: api/Autor/5
         [HttpGet("{id}")]
-        public ActionResult<Autor> GetAutor(Guid id)
+        public ActionResult<AutorDTO> Recuperar(Guid id)
         {
-            var autor = _autorService.RecuperarPorId(id);
+            var autor = _mapper.Map<AutorDTO>(_autorService.RecuperarPorId(id));
 
-            if (autor == null)
-            {
-                return NotFound();
-            }
+            if (autor == null) return NotFound();
 
             return autor;
         }
 
-        // PUT: api/Autor/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public IActionResult PutAutor(Guid id, Autor autor)
-        {
-            if (id != autor.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                _autorService.Alterar(autor);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Autor
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<Autor> PostAutor(Autor autor)
+        public ActionResult<AutorDTO> Incluir(AutorDTO autor)
         {
-            _autorService.Incluir(autor);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return CreatedAtAction("GetAutor", new { id = autor.Id }, autor);
+            _autorService.Incluir(_mapper.Map<Autor>(autor));
+
+            return Ok();
         }
 
-        // DELETE: api/Autor/5
-        [HttpDelete("{id}")]
-        public ActionResult DeleteAutor(Guid id)
+        [HttpPut("{id}")]
+        public ActionResult<AutorDTO> Alterar(Guid id, AutorDTO autor)
         {
-            var autor = _autorService.RecuperarPorId(id);
-            if (autor == null)
-            {
-                return NotFound();
-            }
+            if (id != autor.Id) return BadRequest();
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            _autorService.Alterar(_mapper.Map<Autor>(autor));
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<AutorDTO> Excluir(Guid id)
+        {
+            //Verifica se o registro que será excluído existe
+            var autor = _mapper.Map<AutorDTO>(_autorService.RecuperarPorId(id));
+            if (autor == null) return NotFound();
 
             _autorService.Excluir(id);
 
-            return NoContent();
+            return Ok();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EcadTeste.Domain.Models;
+using System;
 
 namespace EcadTeste.Domain.Interfaces.Services
 {
